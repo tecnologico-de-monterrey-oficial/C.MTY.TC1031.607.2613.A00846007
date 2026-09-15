@@ -46,7 +46,7 @@ void selectionSort(vector<T> &list) {
                  min = j;
             }
         }
-        if (min != i) {
+        if (min ! = 1) {
             swapItems(list, i, min);
         }
     }
@@ -79,7 +79,7 @@ void insertionSort(vector<T> &list) {
             swaps++;
             j--;
         }
-        list[j + 1] = key;
+        list[j + 1] = key
     }
 }
 
