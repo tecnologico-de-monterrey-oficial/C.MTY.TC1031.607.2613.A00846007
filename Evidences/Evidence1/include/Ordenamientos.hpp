@@ -8,11 +8,13 @@
 using namespace std;
 
 enum class Algoritmo {
+    Swap,
     Insercion,
     Seleccion,
     Burbuja,
     Merge,
-    Quick
+    Quick,
+    Shell
 };
 
 string nombreAlgoritmo(Algoritmo algoritmo);

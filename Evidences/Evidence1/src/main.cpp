@@ -1,29 +1,35 @@
 #include "Archivo.hpp"
+#include "Ordenamientos.hpp"
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-void mostrarInformacion(const string& ruta) {
-    vector<Registro> registros = leerArchivo(ruta);
-
-    cout << "\nArchivo: " << ruta << endl;
-    cout << "Registros leidos: " << registros.size() << endl;
-
-    if (!registros.empty()) {
-        cout << "Primer registro:" << endl;
-        cout << registros.front().lineaOriginal << endl;
-        cout << "Timestamp convertido: "
-             << registros.front().timestamp << endl;
-
-        cout << "Ultimo registro:" << endl;
-        cout << registros.back().lineaOriginal << endl;
-    }
-}
-
 int main() {
-    mostrarInformacion("data/log607-1.txt");
-    mostrarInformacion("data/log607-2.txt");
+    vector<Algoritmo> algoritmos = {
+        Algoritmo::Swap,
+        Algoritmo::Seleccion,
+        Algoritmo::Burbuja,
+        Algoritmo::Insercion,
+        Algoritmo::Merge,
+        Algoritmo::Quick,
+        Algoritmo::Shell
+    };
+
+    for (Algoritmo algoritmo : algoritmos) {
+        vector<Registro> registros = leerArchivo("data/log607-1.txt");
+
+        ordenar(registros, algoritmo);
+
+        cout << nombreAlgoritmo(algoritmo) << ": ";
+
+        if (estaOrdenado(registros)) {
+            cout << "ordenado correctamente" << endl;
+        } else {
+            cout << "error en el ordenamiento" << endl;
+        }
+    }
 
     return 0;
 }
