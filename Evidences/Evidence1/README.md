@@ -1,4 +1,4 @@
-Evidencia 1 - Avance 5
+Evidencia 1 - Avance 6
 
 Ian Armando Borde Escobar
 Matricula: A00846007
@@ -52,15 +52,23 @@ Se implementaron siete algoritmos de ordenamiento:
 - Quick Sort
 - Shell Sort
 Se verificó que los siete algoritmos ordenan correctamente log607-1.txt
-Se implementó un menú interactivo.
-Se permite seleccionar cualquiera de los dos archivos.
-Se permite seleccionar cualquiera de los siete algoritmos.
-Se agregó la predicción y justificación antes de cada corrida.
-Se agregó la medición del tiempo de ejecución.
-Se agregó la complejidad teórica de cada algoritmo.
-Se generó output607.txt con los registros ordenados.
-Se generó historial607.txt con los resultados de las corridas.
-Se probaron Swap Sort con log607-1.txt e Insertion Sort con log607-2.txt.
+Se implementó un menú interactivo
+Se permite seleccionar cualquiera de los dos archivos
+Se permite seleccionar cualquiera de los siete algoritmos
+Se agregó la predicción y justificación antes de cada corrida
+Se agregó la medición del tiempo de ejecución
+Se agregó la complejidad teórica de cada algoritmo
+Se generó output607.txt con los registros ordenados
+Se generó historial607.txt con los resultados de las corridas
+Se probaron Swap Sort con log607-1.txt e Insertion Sort con log607-2.txt
+Se integró el menú principal
+Se permite seleccionar el archivo y el algoritmo
+Se agregó la predicción y justificación antes de cada corrida
+Se agregó la medición del tiempo y la complejidad teórica
+Se generaron output607.txt e historial607.txt
+Se integró la búsqueda binaria por rango
+Se generó range607.txt
+Se documentó el manejo de límites inclusivos y timestamps duplicados
 
 Instrucciones para compilar:
 
@@ -77,9 +85,9 @@ Estado de la evidencia:
 
 Ahora el programa permite seleccionar un archivo y un algoritmo, solicita una predicción y su justificación, mide el tiempo de ejecución, muestra la complejidad teórica y genera output607.txt e historial607.txt. Se realizaron pruebas con ambos archivos y los registros quedaron ordenados correctamente.
 
+Se probó Shell Sort con el archivo log607-1.txt y se verificó que los registros quedaran ordenados correctamente. También se realizó una búsqueda por rango sobre el resultado ordenado y se generó range607.txt
+
 Aun esta pendiente por implementar
-- Búsqueda por rango
-- Exportación de range607.txt
 - Pruebas completas de los siete algoritmos con ambos archivos
 - Casos de prueba de rangos vacíos, fechas inválidas y timestamps duplicados
 - Documento de evidencias

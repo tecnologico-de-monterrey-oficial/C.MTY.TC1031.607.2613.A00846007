@@ -1,4 +1,5 @@
 #include "Archivo.hpp"
+#include "Busqueda.hpp"
 #include "Ordenamientos.hpp"
 
 #include <chrono>
@@ -53,7 +54,7 @@ string obtenerPeorCaso(Algoritmo algoritmo) {
 }
 
 void mostrarAlgoritmos() {
-    cout << "\nSeleccione un algoritmo:\n";
+    cout << "Seleccione un algoritmo:\n";
     cout << "1. Swap Sort\n";
     cout << "2. Selection Sort\n";
     cout << "3. Bubble Sort\n";
@@ -77,22 +78,49 @@ Algoritmo seleccionarAlgoritmo(int opcion) {
     return algoritmos[opcion - 1];
 }
 
+void guardarHistorial(
+    const string& ruta,
+    Algoritmo algoritmo,
+    size_t cantidad,
+    long long tiempo,
+    const string& prediccion,
+    const string& justificacion,
+    const string& coincidencia
+) {
+    ofstream historial("out/historial607.txt", ios::app);
+
+    if (!historial) {
+        return;
+    }
+
+    historial << "Algoritmo: "
+              << nombreAlgoritmo(algoritmo) << '\n';
+    historial << "Archivo: " << ruta << '\n';
+    historial << "Registros: " << cantidad << '\n';
+    historial << "Tiempo: " << tiempo << " microsegundos\n";
+    historial << "Mejor caso: "
+              << obtenerMejorCaso(algoritmo) << '\n';
+    historial << "Peor caso: "
+              << obtenerPeorCaso(algoritmo) << '\n';
+    historial << "Prediccion: " << prediccion << '\n';
+    historial << "Justificacion: " << justificacion << '\n';
+    historial << "Coincidencia: " << coincidencia << '\n';
+    historial << "-----------------------------\n";
+}
+
 int main() {
-    bool continuar = true;
+    vector<Registro> registrosOrdenados;
+    string archivoActual;
+    bool hayOrdenamiento = false;
+    int opcionMenu;
 
-    while (continuar) {
-        int opcionArchivo;
-        int opcionAlgoritmo;
-        string prediccion;
-        string justificacion;
-        string coincidencia;
-        string ruta;
-
+    do {
         cout << "Menu principal\n";
-        cout << "1. Ejecutar ordenamiento\n";
-        cout << "2. Salir\n";
+        cout << "1. Ordenar archivo\n";
+        cout << "2. Buscar rango\n";
+        cout << "3. Salir\n";
         cout << "Seleccione una opcion: ";
-        cin >> opcionArchivo;
+        cin >> opcionMenu;
 
         if (cin.fail()) {
             cin.clear();
@@ -101,126 +129,150 @@ int main() {
             continue;
         }
 
-        if (opcionArchivo == 2) {
-            continuar = false;
-            cout << "Programa terminado.\n";
-            continue;
-        }
+        if (opcionMenu == 1) {
+            int opcionArchivo;
+            int opcionAlgoritmo;
+            string prediccion;
+            string justificacion;
+            string coincidencia;
+            string ruta;
 
-        if (opcionArchivo != 1) {
+            cout << "Seleccione el archivo:\n";
+            cout << "1. log607-1.txt desordenado\n";
+            cout << "2. log607-2.txt casi ordenado\n";
+            cout << "Opcion: ";
+            cin >> opcionArchivo;
+
+            if (opcionArchivo == 1) {
+                ruta = "data/log607-1.txt";
+            } else if (opcionArchivo == 2) {
+                ruta = "data/log607-2.txt";
+            } else {
+                cout << "Archivo invalido.\n";
+                continue;
+            }
+
+            mostrarAlgoritmos();
+            cout << "Opcion: ";
+            cin >> opcionAlgoritmo;
+
+            if (opcionAlgoritmo < 1 || opcionAlgoritmo > 7) {
+                cout << "Algoritmo invalido.\n";
+                continue;
+            }
+
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            Algoritmo algoritmo = seleccionarAlgoritmo(opcionAlgoritmo);
+
+            cout << "Escriba su prediccion de velocidad: ";
+            getline(cin, prediccion);
+
+            cout << "Justifique su prediccion: ";
+            getline(cin, justificacion);
+
+            vector<Registro> registros = leerArchivo(ruta);
+
+            if (registros.empty()) {
+                cout << "No se pudieron leer registros.\n";
+                continue;
+            }
+
+            auto inicio = chrono::high_resolution_clock::now();
+
+            ordenar(registros, algoritmo);
+
+            auto final = chrono::high_resolution_clock::now();
+
+            long long tiempo =
+                chrono::duration_cast<chrono::microseconds>(
+                    final - inicio
+                ).count();
+
+            bool ordenCorrecto = estaOrdenado(registros);
+
+            cout << "Resultado\n";
+            cout << "Algoritmo: "
+                 << nombreAlgoritmo(algoritmo) << '\n';
+            cout << "Archivo: " << ruta << '\n';
+            cout << "Registros: " << registros.size() << '\n';
+            cout << "Tiempo: " << tiempo
+                 << " microsegundos\n";
+            cout << "Mejor caso: "
+                 << obtenerMejorCaso(algoritmo) << '\n';
+            cout << "Peor caso: "
+                 << obtenerPeorCaso(algoritmo) << '\n';
+            cout << "Prediccion: " << prediccion << '\n';
+            cout << "Justificacion: "
+                 << justificacion << '\n';
+
+            if (ordenCorrecto) {
+                cout << "Resultado: ordenamiento correcto\n";
+            } else {
+                cout << "Resultado: error en el ordenamiento\n";
+            }
+
+            cout << "¿Coincidio con la prediccion? ";
+            getline(cin, coincidencia);
+
+            escribirArchivo("out/output607.txt", registros);
+
+            guardarHistorial(
+                ruta,
+                algoritmo,
+                registros.size(),
+                tiempo,
+                prediccion,
+                justificacion,
+                coincidencia
+            );
+
+            registrosOrdenados = registros;
+            archivoActual = ruta;
+            hayOrdenamiento = ordenCorrecto;
+
+            cout << "Se genero out/output607.txt\n";
+            cout << "Se actualizo out/historial607.txt\n";
+        } else if (opcionMenu == 2) {
+            if (!hayOrdenamiento) {
+                cout << "Primero debe ordenar un archivo.\n";
+                continue;
+            }
+
+            string inicio;
+            string fin;
+
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            cout << "Ingrese fecha y hora inicial (AAAA-MM-DD HH:MM:SS): ";
+            getline(cin, inicio);
+
+            cout << "Ingrese fecha y hora final (AAAA-MM-DD HH:MM:SS): ";
+            getline(cin, fin);
+
+            if (inicio > fin) {
+                cout << "El rango es invalido.\n";
+                continue;
+            }
+
+            vector<Registro> resultado =
+                buscarRango(registrosOrdenados, inicio, fin);
+
+            escribirArchivo("out/range607.txt", resultado);
+
+            cout << "Archivo utilizado: " << archivoActual << '\n';
+            cout << "Registros encontrados: "
+                 << resultado.size() << '\n';
+            cout << "Se genero out/range607.txt\n";
+            cout << "Los limites del rango son inclusivos.\n";
+            cout << "Los timestamps duplicados se incluyen una sola vez por registro.\n";
+        } else if (opcionMenu != 3) {
             cout << "Opcion invalida.\n";
-            continue;
         }
 
-        cout << "Seleccione el archivo:\n";
-        cout << "1. log607-1.txt desordenado\n";
-        cout << "2. log607-2.txt casi ordenado\n";
-        cout << "Opcion: ";
-        cin >> opcionArchivo;
+    } while (opcionMenu != 3);
 
-        if (opcionArchivo == 1) {
-            ruta = "data/log607-1.txt";
-        } else if (opcionArchivo == 2) {
-            ruta = "data/log607-2.txt";
-        } else {
-            cout << "Archivo invalido.\n";
-            continue;
-        }
-
-        mostrarAlgoritmos();
-        cout << "Opcion: ";
-        cin >> opcionAlgoritmo;
-
-        if (opcionAlgoritmo < 1 || opcionAlgoritmo > 7) {
-            cout << "Algoritmo invalido.\n";
-            continue;
-        }
-
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-        Algoritmo algoritmo = seleccionarAlgoritmo(opcionAlgoritmo);
-
-        cout << "Escriba su prediccion de velocidad: ";
-        getline(cin, prediccion);
-
-        cout << "Justifique su prediccion: ";
-        getline(cin, justificacion);
-
-        vector<Registro> registros = leerArchivo(ruta);
-
-        if (registros.empty()) {
-            cout << "No se pudieron leer registros.\n";
-            continue;
-        }
-
-        auto inicio = chrono::high_resolution_clock::now();
-
-        ordenar(registros, algoritmo);
-
-        auto final = chrono::high_resolution_clock::now();
-
-        long long tiempo = chrono::duration_cast<chrono::microseconds>(
-            final - inicio
-        ).count();
-
-        bool ordenCorrecto = estaOrdenado(registros);
-
-        cout << "Resultado\n";
-        cout << "Algoritmo: " << nombreAlgoritmo(algoritmo) << endl;
-        cout << "Archivo: " << ruta << endl;
-        cout << "Registros: " << registros.size() << endl;
-        cout << "Tiempo: " << tiempo << " microsegundos" << endl;
-        cout << "Mejor caso: " << obtenerMejorCaso(algoritmo) << endl;
-        cout << "Peor caso: " << obtenerPeorCaso(algoritmo) << endl;
-        cout << "Prediccion: " << prediccion << endl;
-        cout << "Justificacion: " << justificacion << endl;
-
-        if (ordenCorrecto) {
-            cout << "Resultado: ordenamiento correcto" << endl;
-        } else {
-            cout << "Resultado: error en el ordenamiento" << endl;
-        }
-
-        cout << "¿Coincidio con la prediccion? ";
-        getline(cin, coincidencia);
-
-        bool archivoGuardado = escribirArchivo(
-            "out/output607.txt",
-            registros
-        );
-
-        if (archivoGuardado) {
-            cout << "Se genero out/output607.txt" << endl;
-        } else {
-            cout << "No se pudo generar el archivo de salida." << endl;
-        }
-
-        ofstream historial("out/historial607.txt", ios::app);
-
-        if (historial) {
-            historial << "Algoritmo: "
-                      << nombreAlgoritmo(algoritmo) << '\n';
-            historial << "Archivo: " << ruta << '\n';
-            historial << "Registros: " << registros.size() << '\n';
-            historial << "Tiempo: " << tiempo << " microsegundos\n";
-            historial << "Mejor caso: "
-                      << obtenerMejorCaso(algoritmo) << '\n';
-            historial << "Peor caso: "
-                      << obtenerPeorCaso(algoritmo) << '\n';
-            historial << "Prediccion: " << prediccion << '\n';
-            historial << "Justificacion: " << justificacion << '\n';
-            historial << "Coincidencia: " << coincidencia << '\n';
-            historial << "-----------------------------\n";
-        }
-
-        char respuesta;
-        cout << "¿Desea realizar otra corrida? (s/n): ";
-        cin >> respuesta;
-
-        if (respuesta != 's' && respuesta != 'S') {
-            continuar = false;
-        }
-    }
+    cout << "Programa terminado.\n";
 
     return 0;
 }
