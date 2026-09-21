@@ -37,13 +37,17 @@ Evidencia1
         Registro.cpp
 
 Avances:
+Avances:
+
 Se creó la estructura inicial del proyecto
 Se implementó la lectura de archivos
 Se implementó la conversión de fechas a formato comparable
 Se conserva la línea original de cada registro
 Se implementó la comparación cronológica
 Se implementó la validación del orden de los registros
+
 Se implementaron siete algoritmos de ordenamiento:
+
 - Swap Sort
 - Selection Sort
 - Bubble Sort
@@ -51,24 +55,19 @@ Se implementaron siete algoritmos de ordenamiento:
 - Merge Sort
 - Quick Sort
 - Shell Sort
-Se verificó que los siete algoritmos ordenan correctamente log607-1.txt
-Se implementó un menú interactivo
+
+Se implementó un menú interactivo.
 Se permite seleccionar cualquiera de los dos archivos
 Se permite seleccionar cualquiera de los siete algoritmos
 Se agregó la predicción y justificación antes de cada corrida
 Se agregó la medición del tiempo de ejecución
 Se agregó la complejidad teórica de cada algoritmo
-Se generó output607.txt con los registros ordenados
-Se generó historial607.txt con los resultados de las corridas
-Se probaron Swap Sort con log607-1.txt e Insertion Sort con log607-2.txt
-Se integró el menú principal
-Se permite seleccionar el archivo y el algoritmo
-Se agregó la predicción y justificación antes de cada corrida
-Se agregó la medición del tiempo y la complejidad teórica
 Se generaron output607.txt e historial607.txt
-Se integró la búsqueda binaria por rango
+Se implementó la búsqueda binaria por rango
 Se generó range607.txt
 Se documentó el manejo de límites inclusivos y timestamps duplicados
+Se completaron las 14 combinaciones de algoritmo y archivo
+Se probaron rangos con resultados, rangos vacíos y fechas fuera del periodo de los registros
 
 Instrucciones para compilar:
 
@@ -83,16 +82,32 @@ y luego se pone
 
 Estado de la evidencia:
 
-Ahora el programa permite seleccionar un archivo y un algoritmo, solicita una predicción y su justificación, mide el tiempo de ejecución, muestra la complejidad teórica y genera output607.txt e historial607.txt. Se realizaron pruebas con ambos archivos y los registros quedaron ordenados correctamente.
+Ahora el programa permite seleccionar un archivo y un algoritmo, solicita una predicción y su justificación, mide el tiempo de ejecución, muestra la complejidad teórica y genera output607.txt e historial607.txt
 
-Se probó Shell Sort con el archivo log607-1.txt y se verificó que los registros quedaran ordenados correctamente. También se realizó una búsqueda por rango sobre el resultado ordenado y se generó range607.txt
+También permite buscar un rango de fechas mediante búsqueda binaria y genera range607.txt. Los límites del rango son inclusivos y los timestamps duplicados se conservan como registros individuales
 
-Aun esta pendiente por implementar
-- Pruebas completas de los siete algoritmos con ambos archivos
-- Casos de prueba de rangos vacíos, fechas inválidas y timestamps duplicados
-- Documento de evidencias
-- Documento de reflexión
-- Video explicativo
+Se completaron las 14 combinaciones de algoritmo y archivo. Los resultados y tiempos están registrados en historial607.txt
+
+Aún está pendiente:
+
+- Completar EvidenciasPruebas.pdf
+- Completar ReflexEvidencia1.pdf
+- Grabar el video explicativo
+- Agregar el enlace del video al README
 
 Uso de IA
-La IA se utilizó como apoyo para revisar errores de compilación, explicar la organización de archivos .cpp y .hpp  y explicar como adaptar los algoritmos de ordenamiento para trabajar con los registros de logs
+Se utilizó inteligencia artificial como apoyo durante el desarrollo del proyecto. La IA se utilizó para explicar errores de compilación, revisar la organización de archivos .cpp y .hpp, y explicar como adaptar los algoritmos de ordenamiento para trabajar con registros y revisar la implementación de búsqueda binaria
+
+Algunos prompts utilizados fueron:
+
+1. “¿Cómo puedo adaptar los algoritmos de ordenamiento de mi Actividad 1.5 para ordenar registros de logs por fecha y hora?”
+
+2. “Revisa mi Ordenamientos.cpp y dime qué errores tiene al trabajar con vector<Registro>.”
+
+3. “¿Cómo puedo implementar una búsqueda binaria por rango que incluya correctamente timestamps duplicados?”
+
+La IA no generó el proyecto completo de una sola vez. Las sugerencias fueron revisadas, adaptadas, compiladas y probadas manualmente
+
+Durante la revisión se detectó un error en una versión del algoritmo Selection Sort. La condición utilizaba una comparación incorrecta con la posición 1, cuando debía comparar la posición del elemento mínimo con la posición actual i. Esto podía provocar intercambios incorrectos y afectar el ordenamiento. La condición se corrigió para utilizar menor != i
+
+También se detectó que inicialmente se habían considerado únicamente cinco algoritmos, aunque la Actividad 1.5 contenía siete. Después de comparar el código con la actividad original, se agregaron Swap Sort y Shell Sort

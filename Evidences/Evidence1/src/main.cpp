@@ -6,10 +6,20 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <regex>
 #include <string>
 #include <vector>
 
 using namespace std;
+
+bool formatoValido(const string& fecha) {
+    regex patron(
+        "^([0-9]{4})-([0-9]{2})-([0-9]{2}) "
+        "([0-9]{2}):([0-9]{2}):([0-9]{2})$"
+    );
+
+    return regex_match(fecha, patron);
+}
 
 string obtenerMejorCaso(Algoritmo algoritmo) {
     switch (algoritmo) {
@@ -249,6 +259,11 @@ int main() {
 
             cout << "Ingrese fecha y hora final (AAAA-MM-DD HH:MM:SS): ";
             getline(cin, fin);
+
+            if (!formatoValido(inicio) || !formatoValido(fin)) {
+                cout << "Formato de fecha invalido. Use AAAA-MM-DD HH:MM:SS.\n";
+                continue;
+            }
 
             if (inicio > fin) {
                 cout << "El rango es invalido.\n";

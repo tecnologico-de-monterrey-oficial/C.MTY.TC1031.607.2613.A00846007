@@ -28,3 +28,163 @@ Prediccion: 450000
 Justificacion: Siento que puede tardar un poco mas que los demas
 Coincidencia: n
 -----------------------------
+Algoritmo: Swap Sort
+Archivo: data/log607-1.txt
+Registros: 6818
+Tiempo: 2979463 microsegundos
+Mejor caso: O(n^2)
+Peor caso: O(n^2)
+Prediccion: Lento
+Justificacion: El archivo esta desordenado
+Coincidencia: n
+-----------------------------
+Algoritmo: Selection Sort
+Archivo: data/log607-1.txt
+Registros: 6818
+Tiempo: 570955 microsegundos
+Mejor caso: O(n^2)
+Peor caso: O(n^2)
+Prediccion: lento
+Justificacion: El archivo esta desordenado
+Coincidencia: n
+-----------------------------
+Algoritmo: Bubble Sort
+Archivo: data/log607-1.txt
+Registros: 6818
+Tiempo: 3106473 microsegundos
+Mejor caso: O(n)
+Peor caso: O(n^2)
+Prediccion: lento
+Justificacion: El archivo esta desordenado
+Coincidencia: s
+-----------------------------
+Algoritmo: Insertion Sort
+Archivo: data/log607-1.txt
+Registros: 6818
+Tiempo: 492365 microsegundos
+Mejor caso: O(n)
+Peor caso: O(n^2)
+Prediccion: lento
+Justificacion: archivo desordenado
+Coincidencia: s
+-----------------------------
+Algoritmo: Merge Sort
+Archivo: data/log607-1.txt
+Registros: 6818
+Tiempo: 23824 microsegundos
+Mejor caso: O(n log n)
+Peor caso: O(n log n)
+Prediccion: lento
+Justificacion: archivo desordenado
+Coincidencia: n
+-----------------------------
+Algoritmo: Quick Sort
+Archivo: data/log607-1.txt
+Registros: 6818
+Tiempo: 16921 microsegundos
+Mejor caso: O(n log n)
+Peor caso: O(n^2)
+Prediccion: lento
+Justificacion: archivo desordenado
+Coincidencia: n
+-----------------------------
+Algoritmo: Shell Sort
+Archivo: data/log607-1.txt
+Registros: 6818
+Tiempo: 13166 microsegundos
+Mejor caso: O(n log n)
+Peor caso: O(n^2)
+Prediccion: lento
+Justificacion: archivo desordenado
+Coincidencia: n
+-----------------------------
+Algoritmo: Swap Sort
+Archivo: data/log607-2.txt
+Registros: 6818
+Tiempo: 576090 microsegundos
+Mejor caso: O(n^2)
+Peor caso: O(n^2)
+Prediccion: rapido
+Justificacion: archivo casi ordenado
+Coincidencia: s
+-----------------------------
+Algoritmo: Selection Sort
+Archivo: data/log607-2.txt
+Registros: 6818
+Tiempo: 570709 microsegundos
+Mejor caso: O(n^2)
+Peor caso: O(n^2)
+Prediccion: rapido
+Justificacion: archivo casi ordenado
+Coincidencia: s
+-----------------------------
+Algoritmo: Bubble Sort
+Archivo: data/log607-2.txt
+Registros: 6818
+Tiempo: 9303 microsegundos
+Mejor caso: O(n)
+Peor caso: O(n^2)
+Prediccion: rapido
+Justificacion: aarchivo casi ordenado
+Coincidencia: s
+-----------------------------
+Algoritmo: Insertion Sort
+Archivo: data/log607-2.txt
+Registros: 6818
+Tiempo: 1920 microsegundos
+Mejor caso: O(n)
+Peor caso: O(n^2)
+Prediccion: rapido
+Justificacion: archivo casi ordenado
+Coincidencia: s
+-----------------------------
+Algoritmo: Merge Sort
+Archivo: data/log607-2.txt
+Registros: 6818
+Tiempo: 19207 microsegundos
+Mejor caso: O(n log n)
+Peor caso: O(n log n)
+Prediccion: rapido
+Justificacion: archivo casi ordenado
+Coincidencia: s
+-----------------------------
+Algoritmo: Quick Sort
+Archivo: data/log607-2.txt
+Registros: 6818
+Tiempo: 1376506 microsegundos
+Mejor caso: O(n log n)
+Peor caso: O(n^2)
+Prediccion: rapido
+Justificacion: archivo casi ordenado
+Coincidencia: n
+-----------------------------
+Algoritmo: Shell Sort
+Archivo: data/log607-2.txt
+Registros: 6818
+Tiempo: 7141 microsegundos
+Mejor caso: O(n log n)
+Peor caso: O(n^2)
+Prediccion: rapido
+Justificacion: archivo casi ordenado
+Coincidencia: s
+-----------------------------
+Algoritmo: Bubble Sort
+Archivo: data/log607-1.txt
+Registros: 6818
+Tiempo: 3309648 microsegundos
+Mejor caso: O(n)
+Peor caso: O(n^2)
+Prediccion: lento
+Justificacion: desordenado
+Coincidencia: s
+-----------------------------
+Algoritmo: Bubble Sort
+Archivo: data/log607-2.txt
+Registros: 6818
+Tiempo: 7728 microsegundos
+Mejor caso: O(n)
+Peor caso: O(n^2)
+Prediccion: rapido
+Justificacion: casi ordenado
+Coincidencia: s
+-----------------------------
