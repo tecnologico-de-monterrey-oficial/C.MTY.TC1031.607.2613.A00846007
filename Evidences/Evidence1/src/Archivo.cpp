@@ -9,8 +9,16 @@ vector<Registro> leerArchivo(const string& ruta) {
     ifstream archivo(ruta);
     string linea;
 
-    while (std::getline(archivo, linea)) {
-        registros.push_back({linea, ""});
+    if (!archivo) {
+        return registros;
+    }
+
+    while (getline(archivo, linea)) {
+        Registro registro;
+
+        if (convertirLinea(linea, registro)) {
+            registros.push_back(registro);
+        }
     }
 
     return registros;

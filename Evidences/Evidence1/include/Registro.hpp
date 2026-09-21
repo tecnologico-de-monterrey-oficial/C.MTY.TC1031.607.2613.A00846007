@@ -9,4 +9,5 @@ struct Registro {
     string timestamp;
 };
 
+bool convertirLinea(const string& linea, Registro& registro);
 bool compararRegistros(const Registro& izquierda, const Registro& derecha);
