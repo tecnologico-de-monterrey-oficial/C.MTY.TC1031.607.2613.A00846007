@@ -188,3 +188,23 @@ Prediccion: rapido
 Justificacion: casi ordenado
 Coincidencia: s
 -----------------------------
+Algoritmo: Swap Sort
+Archivo: data/log607-1.txt
+Registros: 6818
+Tiempo: 3329179 microsegundos
+Mejor caso: O(n^2)
+Peor caso: O(n^2)
+Prediccion: lento
+Justificacion: creo que sera lento porque es un archivo desordenado
+Coincidencia: s
+-----------------------------
+Algoritmo: Swap Sort
+Archivo: data/log607-2.txt
+Registros: 6818
+Tiempo: 618784 microsegundos
+Mejor caso: O(n^2)
+Peor caso: O(n^2)
+Prediccion: rapido
+Justificacion: porque es un archivo casi ordenado
+Coincidencia: s
+-----------------------------

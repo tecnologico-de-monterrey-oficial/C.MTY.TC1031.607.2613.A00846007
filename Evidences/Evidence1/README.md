@@ -1,4 +1,4 @@
-Evidencia 1 - Avance 6
+Evidencia 1 - README
 
 Ian Armando Borde Escobar
 Matricula: A00846007
@@ -36,7 +36,6 @@ Evidencia1
         Ordenamientos.cpp
         Registro.cpp
 
-Avances:
 Avances:
 
 Se creó la estructura inicial del proyecto
@@ -111,3 +110,5 @@ La IA no generó el proyecto completo de una sola vez. Las sugerencias fueron re
 Durante la revisión se detectó un error en una versión del algoritmo Selection Sort. La condición utilizaba una comparación incorrecta con la posición 1, cuando debía comparar la posición del elemento mínimo con la posición actual i. Esto podía provocar intercambios incorrectos y afectar el ordenamiento. La condición se corrigió para utilizar menor != i
 
 También se detectó que inicialmente se habían considerado únicamente cinco algoritmos, aunque la Actividad 1.5 contenía siete. Después de comparar el código con la actividad original, se agregaron Swap Sort y Shell Sort
+
+Link video: https://www.youtube.com/watch?v=DJKp5lENde0
