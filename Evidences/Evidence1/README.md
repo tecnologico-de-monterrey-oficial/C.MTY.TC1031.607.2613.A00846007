@@ -1,4 +1,4 @@
-Evidencia 1 - Avance 4
+Evidencia 1 - Avance 5
 
 Ian Armando Borde Escobar
 Matricula: A00846007
@@ -52,6 +52,15 @@ Se implementaron siete algoritmos de ordenamiento:
 - Quick Sort
 - Shell Sort
 Se verificó que los siete algoritmos ordenan correctamente log607-1.txt
+Se implementó un menú interactivo.
+Se permite seleccionar cualquiera de los dos archivos.
+Se permite seleccionar cualquiera de los siete algoritmos.
+Se agregó la predicción y justificación antes de cada corrida.
+Se agregó la medición del tiempo de ejecución.
+Se agregó la complejidad teórica de cada algoritmo.
+Se generó output607.txt con los registros ordenados.
+Se generó historial607.txt con los resultados de las corridas.
+Se probaron Swap Sort con log607-1.txt e Insertion Sort con log607-2.txt.
 
 Instrucciones para compilar:
 
@@ -59,26 +68,22 @@ Para compilar se tiene que primero poner el path de Evidence1
 cd /Users/"USUARIO"/"DONDE ESTE EL REPO"/C.MTY.TC1031.607.2613.A00846007/Evidences/Evidence1
 
 Luego se usa en la terminal
-clang++ -std=c++17 src/main.cpp src/Registro.cpp src/Archivo.cpp src/Ordenamientos.cpp src/Busqueda.cpp 
--Iinclude -o build/evidence1
+clang++ -std=c++17 src/main.cpp src/Registro.cpp src/Archivo.cpp src/Ordenamientos.cpp src/Busqueda.cpp -Iinclude -o build/evidence1
 
 y luego se pone
 ./build/evidence1
 
 Estado de la evidencia:
 
-va bien, ahorita el programa prueba los sorts que implemente sobre log607-1.txt y verifica que los registros queden ordenados cronologicamente
+Ahora el programa permite seleccionar un archivo y un algoritmo, solicita una predicción y su justificación, mide el tiempo de ejecución, muestra la complejidad teórica y genera output607.txt e historial607.txt. Se realizaron pruebas con ambos archivos y los registros quedaron ordenados correctamente.
 
 Aun esta pendiente por implementar
-- Menu interactivo
-- Selección entre los dos archivos
-- Medición de tiempos
-- Predicción inicial del usuario
-- Exportación de output607.txt
 - Búsqueda por rango
 - Exportación de range607.txt
-- Pruebas completas con ambos archivos
-- Documentos de evidencias y reflexión
+- Pruebas completas de los siete algoritmos con ambos archivos
+- Casos de prueba de rangos vacíos, fechas inválidas y timestamps duplicados
+- Documento de evidencias
+- Documento de reflexión
 - Video explicativo
 
 Uso de IA

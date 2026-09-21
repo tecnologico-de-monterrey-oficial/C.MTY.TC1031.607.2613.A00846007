@@ -1,0 +1,20 @@
+Algoritmo: Swap Sort
+Archivo: data/log607-1.txt
+Registros: 6818
+Tiempo: 3200323 microsegundos
+Mejor caso: O(n^2)
+Peor caso: O(n^2)
+Prediccion: Lento
+Justificacion: El archivo esta desordenado y el algoritmo tiene complejidad cuadratica
+Coincidencia: s
+-----------------------------
+Algoritmo: Insertion Sort
+Archivo: data/log607-2.txt
+Registros: 6818
+Tiempo: 1736 microsegundos
+Mejor caso: O(n)
+Peor caso: O(n^2)
+Prediccion: Rapido
+Justificacion: El archivo esta casi ordenado y insertion sort mejora con datos parcialmente ordenados.
+Coincidencia: s
+-----------------------------
