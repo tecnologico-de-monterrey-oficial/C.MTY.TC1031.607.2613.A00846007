@@ -32,7 +32,7 @@ int main() {
     delete f;
     f = nullptr;
 
-    auto g = std::make_unique<Fraction>(3, 4);
+    std::unique_ptr<Fraction> g = std::make_unique<Fraction>(3, 4);
     g->print();
     cout << g->getDenominator() << "/" << g->getNumerator() << endl;
 
