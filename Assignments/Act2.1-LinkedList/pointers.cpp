@@ -1,11 +1,16 @@
+// Ian Armando Borde Escobar - A00846007
+
 #include <iostream>
+#include <memory>
 using namespace std;
+
+#include "Fraction.h"
 
 int main() {
 
     int x = 42;
     int* p = &x;
-
+    
     cout << x << endl;
     cout << &x << endl;
     cout << p << endl;
@@ -19,6 +24,18 @@ int main() {
     delete q;
     cout << q << endl;
     cout << *q << endl;
+
+    Fraction* f = new Fraction(2, 3);
+
+    f->print();
+    cout << f->getDenominator() << "/" << f->getNumerator() << endl;
+    delete f;
+    f = nullptr;
+
+    auto g = std::make_unique<Fraction>(3, 4);
+    g->print();
+    cout << g->getDenominator() << "/" << g->getNumerator() << endl;
+
 
     return 0;
 }
