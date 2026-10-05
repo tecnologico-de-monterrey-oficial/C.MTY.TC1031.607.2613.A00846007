@@ -3,7 +3,7 @@
 #ifndef Fraction_h
 #define Fraction_h
 #include <iostream>
-// define una clase fracción básica
+
 class Fraction {
 private:
     int numerator;

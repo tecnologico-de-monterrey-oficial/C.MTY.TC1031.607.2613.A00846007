@@ -1,22 +1,21 @@
-#include <iostream>
-using namespace std;
+// Ian Armando Borde Escobar - A00846007
 
+#include <iostream>
+#include <memory>
 #include "Node.h"
 
 int main() {
-
     auto node1 = std::make_unique<Node<int>>(20);
 
-    cout << "node1 data: " << node1->data << endl;
+    auto node2 = std::make_unique<Node<int>>(
+        10, node1.get()
+    );
 
-    auto node2 = std::make_unique<Node<int>>(10, std::move(node1));
+    std::cout << "node2 data: "
+              << node2->data << '\n';
 
-    cout << "node1 data: " << node2->next->data << endl;
-    
-    
-
-    
-
+    std::cout << "node2 next data: "
+              << node2->next->data << '\n';
 
     return 0;
 }

@@ -2,40 +2,38 @@
 
 #include <iostream>
 #include <memory>
-using namespace std;
-
 #include "Fraction.h"
 
 int main() {
-
     int x = 42;
     int* p = &x;
-    
-    cout << x << endl;
-    cout << &x << endl;
-    cout << p << endl;
-    cout << *p << endl;
 
-    cout << "valores de q" << endl;
+    std::cout << x << '\n'
+              << &x << '\n'
+              << p << '\n'
+              << *p << '\n';
+
     int* q = new int(5);
-    cout << q << endl;
-    cout << *q << endl;
+
+    std::cout << "Valores de q\n"
+              << q << '\n'
+              << *q << '\n';
 
     delete q;
-    cout << q << endl;
-    cout << *q << endl;
+    q = nullptr;
+
+    std::cout << "q despues de borrar: "
+              << q << '\n';
 
     Fraction* f = new Fraction(2, 3);
 
     f->print();
-    cout << f->getDenominator() << "/" << f->getNumerator() << endl;
+
     delete f;
     f = nullptr;
 
-    std::unique_ptr<Fraction> g = std::make_unique<Fraction>(3, 4);
+    auto g = std::make_unique<Fraction>(3, 4);
     g->print();
-    cout << g->getDenominator() << "/" << g->getNumerator() << endl;
-
 
     return 0;
 }
