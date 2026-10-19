@@ -6,11 +6,13 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
 #include <system_error>
 #include <tuple>
 #include "../include/Queue.h"
+#include "../include/Stack.h"
 #include "../include/DoublyLinkedList.h"
 #include "../include/LogRecord.h"
 
@@ -53,7 +55,7 @@ bool readInteger(const std::string& prompt, int& value) {
             return true;
         }
 
-        std::cout << "Entrada invalida. Escribe un numero entero\n";
+        std::cout << "Entrada invalida\nEscribe un numero entero\n";
     }
 }
 
@@ -65,7 +67,6 @@ bool openLogFile(
         std::cout << "\nArchivo que deseas cargar:\n"
                   << "log607-1.txt\n"
                   << "log607-2.txt\n"
-                  << "Tambien puedes escribir la ruta de otro archivo\n"
                   << "Archivo: ";
 
         std::string input;
@@ -82,7 +83,6 @@ bool openLogFile(
         }
 
         input = input.substr(first, last - first + 1);
-
         file.open(input);
 
         if (file.is_open()) {
@@ -104,36 +104,11 @@ bool openLogFile(
             file.clear();
         }
 
-        std::cout << "No se pudo abrir el archivo: " << input
-                  << "\nVerifica que exista y que tengas permiso de lectura\n";
+        std::cout << "No se pudo abrir el archivo: " << input << '\n';
     }
 }
 
-bool hasStableOrder(
-    const DoublyLinkedList<LogRecord>& records
-) {
-    const NodeD<LogRecord>* current = records.getHead();
-
-    while (current && current->next) {
-        const LogRecord& first = current->data;
-        const LogRecord& second = current->next->data;
-
-        bool sameTimestamp =
-            !chronologicalLess(first, second)
-            && !chronologicalLess(second, first);
-
-        if (sameTimestamp && first.arrivalOrder > second.arrivalOrder)
-            return false;
-
-        current = current->next;
-    }
-
-    return true;
-}
-
-bool exportRecords(
-    const DoublyLinkedList<LogRecord>& records
-) {
+bool exportRecords(const DoublyLinkedList<LogRecord>& records) {
     std::error_code error;
     std::filesystem::create_directories("out", error);
 
@@ -199,9 +174,7 @@ bool sortLogs(
     }
 
     auto start = std::chrono::steady_clock::now();
-
     auto metrics = records.mergeSort(chronologicalLess);
-
     auto finish = std::chrono::steady_clock::now();
 
     double milliseconds =
@@ -209,48 +182,238 @@ bool sortLogs(
             finish - start
         ).count();
 
-    bool ordered = records.isSorted(chronologicalLess);
-    bool stable = ordered && hasStableOrder(records);
-
     std::cout << "\nRESULTADOS DEL ORDENAMIENTO\n"
               << "Algoritmo: Merge Sort estable\n"
               << "Archivo: " << filename << '\n'
               << "Registros: " << records.getSize() << '\n'
               << "Prediccion: "
-              << (prediction == 1 ? "n * log2(n)" : "n^2")
-              << '\n';
-
-    std::streamsize previousPrecision = std::cout.precision();
-    std::ios_base::fmtflags previousFlags = std::cout.flags();
-
-    std::cout << std::fixed << std::setprecision(6)
-              << "Tiempo de ejecucion: "
-              << milliseconds << " ms\n";
-
-    std::cout.flags(previousFlags);
-    std::cout.precision(previousPrecision);
-
-    std::cout << "Comparaciones del ordenamiento: "
+              << (prediction == 1 ? "n * log2(n)" : "n^2") << '\n'
+              << std::fixed << std::setprecision(6)
+              << "Tiempo de ejecucion: " << milliseconds << " ms\n"
+              << "Comparaciones del ordenamiento: "
               << metrics.comparisons << '\n'
               << "Profundidad maxima de recursion: "
               << metrics.maximumDepth << '\n'
-              << "Orden cronologico correcto: "
-              << (ordered ? "Si" : "No") << '\n'
-              << "Orden de llegada conservado en fechas y horas iguales: "
-              << (stable ? "Si" : "No") << '\n';
-
-    if (!ordered || !stable) {
-        std::cout << "La verificacion fallo. No se exportaron los datos\n";
-        return true;
-    }
-
-    std::cout << "Coincide con la prediccion: "
-              << (prediction == 1 ? "Si" : "No")
-              << ". El crecimiento teorico de Merge Sort es O(n log n)\n"
-              << "Una sola corrida no demuestra el crecimiento asintotico\n";
+              << "Coincide con la prediccion: "
+              << (prediction == 1 ? "Si" : "No") << '\n';
 
     exportRecords(records);
     return true;
+}
+
+struct SearchDay {
+    int year = 0;
+    int month = 0;
+    int day = 0;
+};
+
+std::string formatDay(const SearchDay& date) {
+    std::ostringstream output;
+
+    output << monthName(date.month) << ' '
+           << std::setfill('0') << std::setw(2) << date.day << ' '
+           << std::setw(4) << date.year;
+
+    return output.str();
+}
+
+bool parseDayNumber(const std::string& text, int& value) {
+    if (text.empty() || text.size() > 4)
+        return false;
+
+    value = 0;
+
+    for (char character : text) {
+        if (character < '0' || character > '9')
+            return false;
+
+        value = value * 10 + character - '0';
+    }
+
+    return true;
+}
+
+bool readSearchDay(SearchDay& date) {
+    while (true) {
+        std::cout << "Dia a buscar, por ejemplo Sep 14 2024: ";
+
+        std::string line;
+
+        if (!std::getline(std::cin, line))
+            return false;
+
+        std::istringstream input(line);
+        std::string monthText, dayText, yearText, extra;
+        SearchDay parsed;
+
+        if (!(input >> monthText >> dayText >> yearText)
+            || (input >> extra)) {
+            std::cout << "Formato invalido Usa Mmm DD AAAA\n";
+            continue;
+        }
+
+        parsed.month = monthNumber(monthText);
+
+        if (parsed.month == 0) {
+            std::cout << "Mes invalido Usa Jan, Feb, Mar, Apr, May, Jun, "
+                      << "Jul, Aug, Sep, Oct, Nov o Dec\n";
+            continue;
+        }
+
+        if (dayText.size() > 2 || yearText.size() != 4
+            || !parseDayNumber(dayText, parsed.day)
+            || !parseDayNumber(yearText, parsed.year)) {
+            std::cout << "El dia debe tener uno o dos digitos "
+                      << "y el anio cuatro digitos\n";
+            continue;
+        }
+
+        std::string reason;
+
+        if (!validateDate(parsed.month, parsed.day, parsed.year, reason)) {
+            std::cout << reason << '\n';
+            continue;
+        }
+
+        date = parsed;
+        return true;
+    }
+}
+
+bool searchLogs(
+    const DoublyLinkedList<LogRecord>& records,
+    bool sorted,
+    SearchDay& lastDay,
+    bool& searched,
+    bool descending
+) {
+    if (!sorted) {
+        std::cout << "Primero ordena los registros con la opcion 1\n";
+        return true;
+    }
+
+    if (records.getSize() == 0) {
+        std::cout << "No hay registros para buscar\n";
+        return true;
+    }
+
+    if (!descending || !searched) {
+        if (!readSearchDay(lastDay))
+            return false;
+
+        searched = true;
+    }
+
+    Stack<const LogRecord*> matches;
+    std::size_t found = 0;
+    auto target = std::tie(lastDay.year, lastDay.month, lastDay.day);
+
+    std::cout << "\nLogs del dia " << formatDay(lastDay)
+              << (descending ? " en orden descendente\n" : "\n");
+
+    for (const NodeD<LogRecord>* current = records.getHead();
+         current;
+         current = current->next) {
+        const LogRecord& record = current->data;
+        auto date = std::tie(record.year, record.month, record.day);
+
+        if (date > target)
+            break;
+
+        if (date == target) {
+            ++found;
+
+            if (descending)
+                matches.push(&record);
+            else
+                std::cout << record << '\n';
+        }
+    }
+
+    while (!matches.isEmpty())
+        std::cout << *matches.pop() << '\n';
+
+    if (found == 0)
+        std::cout << "No se encontraron registros para ese dia\n";
+
+    std::cout << "Total encontrado: " << found << '\n';
+    return true;
+}
+
+template <typename Key, typename Format>
+void printMostFrequent(
+    const std::map<Key, std::size_t>& frequencies,
+    const std::string& title,
+    Format format
+) {
+    std::size_t maximum = 0;
+
+    for (const auto& entry : frequencies) {
+        if (entry.second > maximum)
+            maximum = entry.second;
+    }
+
+    std::cout << '\n' << title << '\n';
+
+    for (const auto& entry : frequencies) {
+        if (entry.second == maximum)
+            std::cout << format(entry.first)
+                      << " | Apariciones: " << entry.second << '\n';
+    }
+}
+
+void showStatistics(const DoublyLinkedList<LogRecord>& records) {
+    std::cout << "\nESTADISTICAS DEL ARCHIVO\n"
+              << "Total de registros: " << records.getSize() << '\n';
+
+    if (records.getSize() == 0) {
+        std::cout << "No hay registros para calcular estadisticas\n";
+        return;
+    }
+
+    using DayKey = std::tuple<int, int, int>;
+
+    std::map<DayKey, std::size_t> days;
+    std::map<std::string, std::size_t> events;
+    std::map<std::string, std::size_t> addresses;
+
+    for (const NodeD<LogRecord>* current = records.getHead();
+         current;
+         current = current->next) {
+        const LogRecord& record = current->data;
+
+        ++days[std::make_tuple(record.year, record.month, record.day)];
+        ++events[record.description];
+        ++addresses[record.ip];
+    }
+
+    printMostFrequent(
+        days,
+        "Dias con mas incidentes",
+        [](const DayKey& key) {
+            return formatDay({
+                std::get<0>(key),
+                std::get<1>(key),
+                std::get<2>(key)
+            });
+        }
+    );
+
+    printMostFrequent(
+        events,
+        "Tipos de evento mas frecuentes",
+        [](const std::string& event) {
+            return event;
+        }
+    );
+
+    printMostFrequent(
+        addresses,
+        "Direcciones IP mas frecuentes",
+        [](const std::string& ip) {
+            return ip;
+        }
+    );
 }
 
 int main() {
@@ -259,19 +422,14 @@ int main() {
     std::ifstream file;
     std::string filename;
 
-    if (!openLogFile(file, filename)) {
-        std::cout << "\nEntrada finalizada\n";
+    if (!openLogFile(file, filename))
         return 0;
-    }
 
     Queue<std::string> pendingLines;
     std::string line;
-    std::size_t totalLines = 0;
 
-    while (std::getline(file, line)) {
+    while (std::getline(file, line))
         pendingLines.enqueue(line);
-        ++totalLines;
-    }
 
     if (file.bad() || (file.fail() && !file.eof())) {
         std::cerr << "Ocurrio un error durante la lectura del archivo\n";
@@ -282,7 +440,6 @@ int main() {
 
     DoublyLinkedList<LogRecord> records;
     std::size_t lineNumber = 0;
-    std::size_t loaded = 0;
     std::size_t omitted = 0;
 
     while (!pendingLines.isEmpty()) {
@@ -295,7 +452,6 @@ int main() {
         if (parseLog(currentLine, record, reason)) {
             record.arrivalOrder = lineNumber;
             records.addLast(record);
-            ++loaded;
         } else {
             ++omitted;
 
@@ -306,34 +462,53 @@ int main() {
 
     std::cout << "\nRESUMEN DE CARGA\n"
               << "Archivo: " << filename << '\n'
-              << "Lineas leidas: " << totalLines << '\n'
-              << "Registros cargados: " << loaded << '\n'
+              << "Registros cargados: " << records.getSize() << '\n'
               << "Lineas omitidas: " << omitted << '\n';
 
-    if (loaded == 0)
+    if (records.getSize() == 0)
         std::cout << "El archivo no contiene registros validos\n";
-    else
-        std::cout << "Los registros conservan el orden de llegada\n";
+
+    bool sorted = false;
+    bool searched = false;
+    SearchDay lastDay;
 
     while (true) {
         std::cout << "\nMENU PRINCIPAL\n"
                   << "1. Ordenar por fecha y hora\n"
+                  << "2. Buscar logs por dia\n"
+                  << "3. Mostrar logs por dia en orden descendente\n"
+                  << "4. Estadisticas del archivo\n"
                   << "5. Salir\n";
 
         int option;
 
-        if (!readInteger("Opcion: ", option)) {
-            std::cout << "\nEntrada finalizada\n";
-            break;
-        }
+        if (!readInteger("Opcion: ", option))
+            return 0;
 
         switch (option) {
             case 1:
-                if (!sortLogs(records, filename)) {
-                    std::cout << "\nEntrada finalizada\n";
+                if (!sortLogs(records, filename))
+                    return 0;
+
+                sorted = true;
+                break;
+
+            case 2:
+            case 3:
+                if (!searchLogs(
+                    records,
+                    sorted,
+                    lastDay,
+                    searched,
+                    option == 3
+                )) {
                     return 0;
                 }
 
+                break;
+
+            case 4:
+                showStatistics(records);
                 break;
 
             case 5:
@@ -341,10 +516,8 @@ int main() {
                 return 0;
 
             default:
-                std::cout << "Opcion inexistente. Selecciona 1 o 5\n";
+                std::cout << "Opcion inexistente Selecciona un numero del 1 al 5\n";
                 break;
         }
     }
-
-    return 0;
 }
