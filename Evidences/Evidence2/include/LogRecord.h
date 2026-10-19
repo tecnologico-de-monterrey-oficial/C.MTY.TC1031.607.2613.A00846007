@@ -3,6 +3,7 @@
 #ifndef LOGRECORD_H
 #define LOGRECORD_H
 
+#include <cstddef>
 #include <ostream>
 #include <string>
 
@@ -15,6 +16,7 @@ struct LogRecord {
     int second = 0;
     std::string ip;
     std::string description;
+    std::size_t arrivalOrder = 0;
 };
 
 int monthNumber(const std::string& month);

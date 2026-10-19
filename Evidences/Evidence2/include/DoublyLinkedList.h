@@ -3,6 +3,7 @@
 #ifndef DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_H
 
+#include <cstddef>
 #include <iostream>
 #include <stdexcept>
 #include <utility>
@@ -10,6 +11,12 @@
 
 template <typename T>
 class DoublyLinkedList {
+public:
+    struct SortMetrics {
+        std::size_t comparisons = 0;
+        std::size_t maximumDepth = 0;
+    };
+
 private:
     NodeD<T>* head;
     NodeD<T>* tail;
@@ -19,6 +26,101 @@ private:
         std::swap(head, other.head);
         std::swap(tail, other.tail);
         std::swap(size, other.size);
+    }
+
+    template <typename Compare>
+    NodeD<T>* mergeNodes(
+        NodeD<T>* left,
+        NodeD<T>* right,
+        Compare& compare,
+        SortMetrics& metrics
+    ) {
+        NodeD<T>* result = nullptr;
+        NodeD<T>* last = nullptr;
+
+        while (left || right) {
+            NodeD<T>* selected;
+
+            if (!right) {
+                selected = left;
+                left = left->next;
+            } else if (!left) {
+                selected = right;
+                right = right->next;
+            } else {
+                ++metrics.comparisons;
+
+                if (compare(right->data, left->data)) {
+                    selected = right;
+                    right = right->next;
+                } else {
+                    selected = left;
+                    left = left->next;
+                }
+            }
+
+            selected->prev = last;
+
+            if (last)
+                last->next = selected;
+            else
+                result = selected;
+
+            last = selected;
+        }
+
+        if (last)
+            last->next = nullptr;
+
+        return result;
+    }
+
+    template <typename Compare>
+    NodeD<T>* sortNodes(
+        NodeD<T>* first,
+        int count,
+        std::size_t depth,
+        Compare& compare,
+        SortMetrics& metrics
+    ) {
+        if (depth > metrics.maximumDepth)
+            metrics.maximumDepth = depth;
+
+        if (count <= 1)
+            return first;
+
+        int leftCount = count / 2;
+        NodeD<T>* right = first;
+
+        for (int i = 0; i < leftCount; ++i)
+            right = right->next;
+
+        NodeD<T>* leftLast = right->prev;
+        leftLast->next = nullptr;
+        right->prev = nullptr;
+
+        NodeD<T>* leftSorted = sortNodes(
+            first,
+            leftCount,
+            depth + 1,
+            compare,
+            metrics
+        );
+
+        NodeD<T>* rightSorted = sortNodes(
+            right,
+            count - leftCount,
+            depth + 1,
+            compare,
+            metrics
+        );
+
+        return mergeNodes(
+            leftSorted,
+            rightSorted,
+            compare,
+            metrics
+        );
     }
 
 public:
@@ -141,6 +243,43 @@ public:
 
         tail = nullptr;
         size = 0;
+    }
+
+    template <typename Compare>
+    bool isSorted(Compare compare) const {
+        const NodeD<T>* current = head;
+
+        while (current && current->next) {
+            if (compare(current->next->data, current->data))
+                return false;
+
+            current = current->next;
+        }
+
+        return true;
+    }
+
+    template <typename Compare>
+    SortMetrics mergeSort(Compare compare) {
+        SortMetrics metrics;
+
+        if (!head)
+            return metrics;
+
+        head = sortNodes(
+            head,
+            size,
+            1,
+            compare,
+            metrics
+        );
+
+        tail = head;
+
+        while (tail->next)
+            tail = tail->next;
+
+        return metrics;
     }
 
     void print(std::ostream& out = std::cout) const {

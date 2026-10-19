@@ -350,7 +350,7 @@ int main() {
         probarQueue();
         probarDoublyLinkedList();
 
-        std::cout << "\nTodas las pruebas terminaron correctamente.\n";
+        std::cout << "\nTodas las pruebas terminaron correctamente\n";
     } catch (const std::exception& error) {
         std::cerr << "\nPrueba fallida: " << error.what() << '\n';
         return 1;
